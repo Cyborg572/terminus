@@ -175,12 +175,10 @@ class SitesTest extends CollectionTestCase
 
     public function testFilterByOwner()
     {
-
     }
 
     public function testFilterByTag()
     {
-
     }
 
     /**
