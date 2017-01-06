@@ -163,13 +163,11 @@ class Request implements ConfigAwareInterface, SessionAwareInterface, LoggerAwar
      */
     private function send($uri, $method, array $arg_params = [])
     {
-        $host = $this->getConfig()->get('host');
         $extra_params = [
             'headers' => [
                 'User-Agent' => $this->userAgent(),
                 'Content-type' => 'application/json',
             ],
-            RequestOptions::VERIFY => (strpos($host, 'onebox') === false),
         ];
 
         if ((!isset($arg_params['absolute_url']) || !$arg_params['absolute_url'])
@@ -182,7 +180,8 @@ class Request implements ConfigAwareInterface, SessionAwareInterface, LoggerAwar
             $params['json'] = $params['form_params'];
             unset($params['form_params']);
         }
-        $params[RequestOptions::VERIFY] = (strpos($host, 'onebox') === false);
+        $verify = (boolean)$this->getConfig()->get('verify_host_cert', true);
+        $params[RequestOptions::VERIFY] = $verify;
 
         $client = new Client(
             [
